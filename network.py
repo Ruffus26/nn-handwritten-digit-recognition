@@ -40,12 +40,12 @@ class Network(object):
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
             if test_data:
-                print "Epoch {0}: {1} / {2}".format(j, self.evaluate(test_data), n_test)
-            else
-                print "Epoch {0} complete".format(j)
+                print ("Epoch {0}: {1} / {2}".format(j, self.evaluate(test_data), n_test))
+            else:
+                print ("Epoch {0} complete".format(j))
 
     # Update the network's weights and biases by applying gradient descent using backpropagation to a single mini_batch
-    def update_mini_batch(self, mini_batch, eta, lmdba, n):
+    def update_mini_batch(self, mini_batch, eta):
         # mini_batch -> list of tuples
         # eta -> learning rate
         # Declare the layer-by-layer list of biases and weights arrays
@@ -81,7 +81,7 @@ class Network(object):
         lbl_b[-1] = delta
         lbl_w[-1] = np.dot(delta, activations[-2].transpose())
         for l in range(2, self.num_layers):
-            z = zs[-1]
+            z = zs[-l]
             sp = sigmoid_prime(z)
             delta = np.dot(self.weights[-l + 1].transpose(), delta) * sp
             lbl_b[-l] = delta
