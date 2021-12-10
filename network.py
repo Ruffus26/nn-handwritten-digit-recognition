@@ -30,14 +30,19 @@ class Network(object):
         return a
 
     # Train the neural network using mini-batch stochastic gradient descent
-    def SGD(self, training_data, epochs, mini_batch_size, eta):
+    def SGD(self, training_data, epochs, mini_batch_size, eta, test_data=None):
         # training_data -> is a list of tuples representing the training inputs and the corresponding desired outputs
+        if test_data: n_test = len(test_data)
         n = len(training_data)
         for j in range(epochs):
             random.shuffle(training_data)
             mini_batches = [training_data[k:k + mini_batch_size] for k in range(0, n, mini_batch_size)]
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
+            if test_data:
+                print "Epoch {0}: {1} / {2}".format(j, self.evaluate(test_data), n_test)
+            else
+                print "Epoch {0} complete".format(j)
 
     # Update the network's weights and biases by applying gradient descent using backpropagation to a single mini_batch
     def update_mini_batch(self, mini_batch, eta, lmdba, n):
