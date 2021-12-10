@@ -6,48 +6,22 @@ import random
 def sigmoid(z):
     return 1.0 / (1.0 + np.exp(-z))
 
+
 # Derivative of sigmoid function
 def sigmoid_prime(z):
     return sigmoid(z) * (1 - sigmoid(z))
 
 
-# Define the quadratic cost function
-class QuadraticCost(object):
-    # Return the cost associated with an output a and desired output y
-    @staticmethod
-    def fn(a, y):
-        return 0.5 * np.linalg.norm(a - y) ** 2
-
-    # Return the error delta from the output layer
-    @staticmethod
-    def delta(z, a, y):
-        return (a - y) * sigmoid_prime(z)
-
-
-# Define the cross-entropy cost function
-class CrossEntropyCost(object):
-    # Return the cost associated with an output a and desired output y
-    @staticmethod
-    def fn(a, y):
-        return np.sum(np.nan_to_num(-y * np.log(a) - (1 - y) * np.log(1 - a)))
-
-    # Return the error delta from the output layer
-    @staticmethod
-    def delta(z, a, y):
-        return a - y
-
-
 class Network(object):
 
     # Constructor to initialize and create the neural network
-    def __init__(self, sizes, cost=CrossEntropyCost):
+    def __init__(self, sizes):
         # Sizes is a list that contains the number of neurons in the layer indicated by the index of list
         self.num_layers = len(sizes)
         self.sizes = sizes
         # Initialize each weight and the biases using a Gaussian distribution
         self.weights = [np.random.randn(y, x) / np.sqrt(x) for x, y in zip(self.sizes[:-1], self.sizes[1:])]
         self.biases = [np.random.randn(y, 1) for y in self.sizes[1:]]
-        self.cost = cost
 
     # Return the output of the network for an input a
     def feedforward(self, a):
@@ -61,7 +35,7 @@ class Network(object):
         n = len(training_data)
         for j in range(epochs):
             random.shuffle(training_data)
-            mini_batches = [training_data[k:k+mini_batch_size] for k in range(0, n, mini_batch_size)]
+            mini_batches = [training_data[k:k + mini_batch_size] for k in range(0, n, mini_batch_size)]
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
 
@@ -78,8 +52,8 @@ class Network(object):
             lbl_w = [lw + dlw for lw, dlw in zip(lbl_w, delta_lbl_w)]
 
         # Update biases and weights
-        self.biases = [b - (eta/len(mini_batch))*new_b for b, new_b in zip(self.biases, lbl_b)]
-        self.weights = [w - (eta/len(mini_batch))*new_w for w, new_w in zip(self.weights, lbl_w)]
+        self.biases = [b - (eta / len(mini_batch)) * new_b for b, new_b in zip(self.biases, lbl_b)]
+        self.weights = [w - (eta / len(mini_batch)) * new_w for w, new_w in zip(self.weights, lbl_w)]
 
     # Return a tuple representing the gradient for the cost function
     def backpropagation(self, inp, desired_out):
@@ -104,9 +78,9 @@ class Network(object):
         for l in range(2, self.num_layers):
             z = zs[-1]
             sp = sigmoid_prime(z)
-            delta = np.dot(self.weights[-l+1].transpose(), delta) * sp
+            delta = np.dot(self.weights[-l + 1].transpose(), delta) * sp
             lbl_b[-l] = delta
-            lbl_w[-l] = np.dot(delta, activations[-l-1].transpose())
+            lbl_w[-l] = np.dot(delta, activations[-l - 1].transpose())
         return lbl_b, lbl_w
 
     # Return the number of test inputs for which the NN outputs the correct result
