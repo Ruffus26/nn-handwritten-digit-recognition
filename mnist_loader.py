@@ -15,8 +15,10 @@ def load_data():
 
     # The validation data and test data contains only 10000 images
 
-    f = gzip.open("./data/mnist.pkl.gz", rb)
-    training_data, validation_data, test_data = pickle.load(f)
+    f = gzip.open("./data/mnist.pkl.gz", "rb")
+    u = pickle._Unpickler(f)
+    u.encoding = 'latin1'
+    training_data, validation_data, test_data = u.load()
     f.close()
 
     return (training_data, validation_data, test_data)
@@ -35,11 +37,11 @@ def load_data_wrapper():
     tr_data, va_data, te_data = load_data()
     training_inputs = [np.reshape(x, (784, 1)) for x in tr_data[0]]
     training_results = [vectorized_result(y) for y in tr_data[1]]
-    training_data = zip(training_inputs, training_results)
+    training_data = list(zip(training_inputs, training_results))
     validation_inputs = [np.reshape(x, (784, 1)) for x in va_data[0]]
-    validation_data = zip(validation_inputs, va_data[1])
+    validation_data = list(zip(validation_inputs, va_data[1]))
     test_inputs = [np.reshape(x, (784, 1)) for x in te_data[0]]
-    test_data = zip(test_inputs, te_data[1])
+    test_data = list(zip(test_inputs, te_data[1]))
 
     return training_data, validation_data, test_data
 
@@ -47,7 +49,7 @@ def load_data_wrapper():
 def vectorized_result(j):
     # Return a 10-dimensional unit vector with a 1 in the jth position and 0 elsewhere
 
-    v = np.zeros(10, 1)
+    v = np.zeros((10, 1))
     v[j] = 1.0
     return v
 
