@@ -1,5 +1,6 @@
 import numpy as np
 import random
+import json
 
 
 # Return the output for sigmoid neuron layer
@@ -10,6 +11,11 @@ def sigmoid(z):
 # Derivative of sigmoid function
 def sigmoid_prime(z):
     return sigmoid(z) * (1 - sigmoid(z))
+
+
+# Return the vector of partial derivatives
+def cost_derivative(output_activations, y):
+    return output_activations - y
 
 
 class Network(object):
@@ -32,7 +38,8 @@ class Network(object):
     # Train the neural network using mini-batch stochastic gradient descent
     def SGD(self, training_data, epochs, mini_batch_size, eta, test_data=None):
         # training_data -> is a list of tuples representing the training inputs and the corresponding desired outputs
-        if test_data: n_test = len(test_data)
+        if test_data:
+            n_test = len(test_data)
         n = len(training_data)
         for j in range(epochs):
             random.shuffle(training_data)
@@ -40,9 +47,9 @@ class Network(object):
             for mini_batch in mini_batches:
                 self.update_mini_batch(mini_batch, eta)
             if test_data:
-                print ("Epoch {0}: {1} / {2}".format(j, self.evaluate(test_data), n_test))
+                print("Epoch {0}: {1} / {2}".format(j, self.evaluate(test_data), n_test))
             else:
-                print ("Epoch {0} complete".format(j))
+                print("Epoch {0} complete".format(j))
 
     # Update the network's weights and biases by applying gradient descent using backpropagation to a single mini_batch
     def update_mini_batch(self, mini_batch, eta):
@@ -77,7 +84,7 @@ class Network(object):
             activation = sigmoid(z)
             activations.append(activation)
         # backpropagation
-        delta = self.cost_derivative(activations[-1], desired_out) * sigmoid_prime(zs[-1])
+        delta = cost_derivative(activations[-1], desired_out) * sigmoid_prime(zs[-1])
         lbl_b[-1] = delta
         lbl_w[-1] = np.dot(delta, activations[-2].transpose())
         for l in range(2, self.num_layers):
@@ -94,6 +101,13 @@ class Network(object):
         test_results = [(np.argmax(self.feedforward(x)), y) for (x, y) in test_data]
         return sum(int(x == y) for (x, y) in test_results)
 
-    # Return the vector of partial derivatives
-    def cost_derivative(self, output_activations, y):
-        return output_activations - y
+    # Save/extract weights and biases from the trained network
+    def save(self, w_file, b_file):
+        weights_data = {"weights": [w.tolist() for w in self.weights]}
+        biases_data = {"biases": [b.tolist() for b in self.biases]}
+        f = open(w_file, "w")
+        json.dump(weights_data, f)
+        f.close()
+        f = open(b_file, "w")
+        json.dump(biases_data, f)
+        f.close()
