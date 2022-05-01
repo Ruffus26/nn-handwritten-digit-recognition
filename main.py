@@ -10,8 +10,8 @@ def main():
     net = network.Network([784, 16, 10])
 
     # Use stochastic gradient descent to learn from the MNIST training_data over 30 epochs, with a mini-batch size of
-    # 10 and a learning rate of 3
-    net.SGD(training_data, 10, 10, 3.0, test_data=test_data)
+    # 50 and a learning rate of 1
+    net.SGD(training_data, 30, 50, 1.0, test_data=test_data)
 
     # Save data from trained network
     net.save("Weights.txt", "Biases.txt")
