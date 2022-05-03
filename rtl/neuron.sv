@@ -27,7 +27,7 @@ parameter addrWidth = $clog2(weightSize);
 // Store the bias value of the neuron
 reg [dataWidth - 1:0] biasReg [0:0];
 // Provide the double dataWidth value of bias
-reg signed [2*dataWidth - 1:0] bias;
+reg [2*dataWidth - 1:0] bias;
 // Read address value from weight memory
 reg [addrWidth:0] read_addr;
 // Enable read from weight memory
@@ -39,32 +39,27 @@ reg weight_valid;
 // Valid for performing multiplication
 reg mult_valid;
 // Weight Memory output
-wire signed [dataWidth - 1:0] wout;
+wire [dataWidth - 1:0] wout;
 // Store the result of multiplication between the weight and the neuron input
-reg signed [2*dataWidth - 1:0] mult_res;
+reg [2*dataWidth - 1:0] mult_res;
 // Valid for driving data to activation function module
 reg activation_valid;
 // Addition between previous neuron sum and (value * weight) multiplication
-wire signed [2*dataWidth:0] add;
+wire [2*dataWidth:0] add;
 // Addition between bias and the final sum
-wire signed [2*dataWidth:0] biasAdd;
+wire [2*dataWidth:0] biasAdd;
 // Store and accumulate the current sum for the neuron
 reg [2*dataWidth - 1:0] sum;
 // Valid for performing addition between products
 reg sum_valid;
 
 assign ren     = neuron_in_valid;
-assign add     = $signed(mult_res) + $signed(sum);
-assign biasAdd = $signed(bias) + $signed(sum);
+assign add     = mult_res + sum;
+assign biasAdd = bias + sum;
 
 // Initialize the bias memory
 initial begin
     $readmemb(biasFile, biasReg);
-end
-
-// bias register definition
-always @(posedge clk) 
-begin
     bias <= {biasReg[0][dataWidth - 1:0], {dataWidth{1'b0}}};
 end
 

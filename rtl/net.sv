@@ -26,6 +26,7 @@ localparam SEND = 1;
 // NN parameters
 localparam hidden_layer_nn = 16;
 localparam out_layer_nn    = 10;
+localparam sigmoid_size    = 5;
 
 // Hidden layer registers and connection wires
 wire [hidden_layer_nn - 1:0]           hidden_layer_out_valid   ;
@@ -35,7 +36,9 @@ reg                                    hlayer_out_valid         ;
 reg  [dataWidth - 1:0]                 hlayer_out_data          ;
 
 hidden_layer #(
-    .dataWidth       (dataWidth              )
+    .dataWidth       (dataWidth              ),
+    .neurons         (hidden_layer_nn        ),
+    .sigmoidSize     (sigmoid_size           )
 ) i_hidden_layer (
     .clk             (clk                    ),
     .rst_n           (rst_n                  ),
@@ -85,7 +88,9 @@ wire                                output_layer_valid ;
 wire [out_layer_nn*dataWidth - 1:0] output_layer_data  ;
 
 output_layer #(
-    .dataWidth           (dataWidth          )
+    .dataWidth           (dataWidth          ),
+    .neurons             (out_layer_nn       ),
+    .sigmoidSize         (sigmoid_size       )
 ) i_output_layer (
     .clk                 (clk                ),
     .rst_n               (rst_n              ),
@@ -98,7 +103,8 @@ output_layer #(
 //// Max finder instantiation ////
 
 max_find #(
-    .dataWidth (dataWidth          )
+    .dataWidth (dataWidth          ),
+    .inData    (out_layer_nn       )
 ) i_max_find (
     .clk       (clk                ),
     .rst_n     (rst_n              ),

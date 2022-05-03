@@ -68,7 +68,9 @@ nn_memory #(
 
 // Instantiate the neural network core
 net #(
-    .dataWidth     (dataWidth )
+    .dataWidth     (dataWidth ),
+    .outData       (outData   ),
+    .outWidth      (outWidth  )
 ) i_net (
     .clk           (clk       ),
     .rst_n         (rst_n     ),
