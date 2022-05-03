@@ -9,9 +9,8 @@ def main():
     # Create the Neural Network with 784 input neurons, 16 hidden neurons and 10 output neurons
     net = network.Network([784, 16, 10])
 
-    # Use stochastic gradient descent to learn from the MNIST training_data over 30 epochs, with a mini-batch size of
-    # 50 and a learning rate of 1
-    net.SGD(training_data, 30, 50, 1.0, test_data=test_data)
+    # Use stochastic gradient descent to learn from the MNIST training_data
+    net.SGD(training_data, 30, 100, 1.5, test_data=test_data)
 
     # Save data from trained network
     net.save("Weights.txt", "Biases.txt")
