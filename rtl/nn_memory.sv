@@ -17,7 +17,7 @@ module nn_memory #(
 );
 
 // Memory array
-reg [dataWidth - 1:0] mem [0:memWidth - 1];
+reg [dataWidth - 1:0] mem [memWidth - 1:0];
 
 // Memory parameters
 localparam addrWidth = $clog2(memWidth);
