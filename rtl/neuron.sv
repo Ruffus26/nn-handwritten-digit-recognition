@@ -52,6 +52,8 @@ wire [2*dataWidth:0] biasAdd;
 reg [2*dataWidth - 1:0] sum;
 // Valid for performing addition between products
 reg sum_valid;
+// A pulse indicating the last calculated sum
+reg sum_last;
 
 assign ren     = neuron_in_valid;
 assign add     = mult_res + sum;
@@ -111,9 +113,11 @@ begin
     sum_valid <= mult_valid;
 end
 
-// A pulse indicating the last calculated sum
-wire sum_valid_last;
-assign sum_valid_last = sum_valid & !mult_valid; 
+// sum_valid register definition
+always @(posedge clk) 
+begin
+    sum_last <= sum_valid & !mult_valid; 
+end
 
 // sum register definition
 always @(posedge clk)
@@ -122,19 +126,19 @@ begin
         sum <= 'b0;
     else if (neuron_out_valid)
         sum <= 'b0;
-    else if ((read_addr == weightSize) & sum_valid_last)
+    else if ((read_addr == weightSize) & sum_last)
     begin
         //// the sum of products finished -> add Bias ////
         // if bias and previous sum are positive, and the sign bit of their addition is 1
         // then saturate the current sum with 1s and a 0 for the sign bit
-        if (!bias[2*dataWidth - 1] & !sum[dataWidth - 1] & biasAdd[2*dataWidth - 1])
+        if (!bias[2*dataWidth - 1] & !sum[2*dataWidth - 1] & biasAdd[2*dataWidth - 1])
         begin
             sum[2*dataWidth - 1]   <= 1'b0;
             sum[2*dataWidth - 2:0] <= {2*dataWidth-1{1'b1}};
         end
         // if bias and previous sum are negative, and the sign bit of their addition is 0
         // then saturate the current sum with 0s and a 1 for the sign bit
-        else if (bias[2*dataWidth - 1] & sum[dataWidth - 1] & biasAdd[2*dataWidth - 1])
+        else if (bias[2*dataWidth - 1] & sum[2*dataWidth - 1] & !biasAdd[2*dataWidth - 1])
         begin
             sum[2*dataWidth - 1]   <= 1'b1;
             sum[2*dataWidth - 2:0] <= {2*dataWidth-1{1'b0}};
@@ -169,7 +173,7 @@ begin
     if (!rst_n)
         activation_valid <= 0;
     else 
-        activation_valid <= ((read_addr == weightSize) && sum_valid_last) ? 1'b1 : 1'b0;
+        activation_valid <= ((read_addr == weightSize) && sum_last) ? 1'b1 : 1'b0;
 end
 
 // neuron_out_valid register definition
@@ -195,26 +199,26 @@ weight_mem #(
 );
 
 // Instantiate the Memory for Sigmoid Mapping
-sigmoid_rom #(
-    .inWidth     (sigmoidSize ),
-    .dataWidth   (dataWidth   ),
-    .sigmoidFile (sigmoidFile )
-) i_sigmoid_rom (
-    .clk     (clk                               ),
-    .in_val  (activation_valid                  ),
-    .sig_in  (sum[2*dataWidth - 1-:sigmoidSize] ),
-    .sig_out (neuron_out                        )
-);
+// sigmoid_rom #(
+//     .inWidth     (sigmoidSize ),
+//     .dataWidth   (dataWidth   ),
+//     .sigmoidFile (sigmoidFile )
+// ) i_sigmoid_rom (
+//     .clk     (clk                               ),
+//     .in_val  (activation_valid                  ),
+//     .sig_in  (sum[2*dataWidth - 1-:sigmoidSize] ),
+//     .sig_out (neuron_out                        )
+// );
 
 // Instantiate the ReLu activation module
-// relu_activation #(
-//     .dataWidth  (dataWidth              )
-// ) i_relu (
-//     .clk        (clk                    ),
-//     .rst_n      (rst_n                  ),
-//     .relu_valid (activation_valid       ),
-//     .relu_in    (sum[2*dataWidth - 1:0] ),
-//     .relu_out   (neuron_out             )
-// );
+relu_activation #(
+    .dataWidth  (dataWidth         )
+) i_relu (
+    .clk        (clk               ),
+    .rst_n      (rst_n             ),
+    .relu_valid (activation_valid  ),
+    .relu_in    (sum               ),
+    .relu_out   (neuron_out        )
+);
 
 endmodule
