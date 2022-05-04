@@ -2,12 +2,12 @@
 
 // Author : Cernalevschi Cristian
 // Project: NN handwritten digit recognition
-// File   : Hidden layer module
+// File   : Hidden layer 3 module
 
-module hidden_layer #(
-    parameter neurons     = 16  ,
+module hidden_layer_3 #(
+    parameter neurons     = 10  ,
               dataWidth   = 16  ,
-              weightSize  = 784 ,
+              weightSize  = 30  ,
               sigmoidSize = 5
 ) (
     input                            clk             ,
@@ -23,8 +23,8 @@ neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
     .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_0.mem"   ),
-    .weightFile  ("w_1_0.mem"   ),
+    .biasFile    ("b_3_0.mif"   ),
+    .weightFile  ("w_3_0.mif"   ),
     .sigmoidFile ("sigmoid.mem" )
 ) n_0 (
     .clk              (clk                                    ),
@@ -39,8 +39,8 @@ neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
     .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_1.mem"   ),
-    .weightFile  ("w_1_1.mem"   ),
+    .biasFile    ("b_3_1.mif"   ),
+    .weightFile  ("w_3_1.mif"   ),
     .sigmoidFile ("sigmoid.mem" )
 ) n_1 (
     .clk              (clk                                    ),
@@ -55,8 +55,8 @@ neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
     .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_2.mem"   ),
-    .weightFile  ("w_1_2.mem"   ),
+    .biasFile    ("b_3_2.mif"   ),
+    .weightFile  ("w_3_2.mif"   ),
     .sigmoidFile ("sigmoid.mem" )
 ) n_2 (
     .clk              (clk                                    ),
@@ -71,8 +71,8 @@ neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
     .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_3.mem"   ),
-    .weightFile  ("w_1_3.mem"   ),
+    .biasFile    ("b_3_3.mif"   ),
+    .weightFile  ("w_3_3.mif"   ),
     .sigmoidFile ("sigmoid.mem" )
 ) n_3 (
     .clk              (clk                                    ),
@@ -87,8 +87,8 @@ neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
     .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_4.mem"   ),
-    .weightFile  ("w_1_4.mem"   ),
+    .biasFile    ("b_3_4.mif"   ),
+    .weightFile  ("w_3_4.mif"   ),
     .sigmoidFile ("sigmoid.mem" )
 ) n_4 (
     .clk              (clk                                    ),
@@ -103,8 +103,8 @@ neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
     .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_5.mem"   ),
-    .weightFile  ("w_1_5.mem"   ),
+    .biasFile    ("b_3_5.mif"   ),
+    .weightFile  ("w_3_5.mif"   ),
     .sigmoidFile ("sigmoid.mem" )
 ) n_5 (
     .clk              (clk                                    ),
@@ -119,8 +119,8 @@ neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
     .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_6.mem"   ),
-    .weightFile  ("w_1_6.mem"   ),
+    .biasFile    ("b_3_6.mif"   ),
+    .weightFile  ("w_3_6.mif"   ),
     .sigmoidFile ("sigmoid.mem" )
 ) n_6 (
     .clk              (clk                                    ),
@@ -135,8 +135,8 @@ neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
     .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_7.mem"   ),
-    .weightFile  ("w_1_7.mem"   ),
+    .biasFile    ("b_3_7.mif"   ),
+    .weightFile  ("w_3_7.mif"   ),
     .sigmoidFile ("sigmoid.mem" )
 ) n_7 (
     .clk              (clk                                    ),
@@ -151,8 +151,8 @@ neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
     .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_8.mem"   ),
-    .weightFile  ("w_1_8.mem"   ),
+    .biasFile    ("b_3_8.mif"   ),
+    .weightFile  ("w_3_8.mif"   ),
     .sigmoidFile ("sigmoid.mem" )
 ) n_8 (
     .clk              (clk                                    ),
@@ -167,8 +167,8 @@ neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
     .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_9.mem"   ),
-    .weightFile  ("w_1_9.mem"   ),
+    .biasFile    ("b_3_9.mif"   ),
+    .weightFile  ("w_3_9.mif"   ),
     .sigmoidFile ("sigmoid.mem" )
 ) n_9 (
     .clk              (clk                                    ),
@@ -177,102 +177,6 @@ neuron #(
     .neuron_in        (layer_in_data                          ),
     .neuron_out_valid (layer_out_valid[9]                     ),
     .neuron_out       (layer_out_data[9*dataWidth+:dataWidth] )
-);
-
-neuron #(
-    .weightSize  (weightSize    ),
-    .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_10.mem"  ),
-    .weightFile  ("w_1_10.mem"  ),
-    .sigmoidFile ("sigmoid.mem" )
-) n_10 (
-    .clk              (clk                                     ),
-    .rst_n            (rst_n                                   ),
-    .neuron_in_valid  (layer_in_valid                          ),
-    .neuron_in        (layer_in_data                           ),
-    .neuron_out_valid (layer_out_valid[10]                     ),
-    .neuron_out       (layer_out_data[10*dataWidth+:dataWidth] )
-);
-
-neuron #(
-    .weightSize  (weightSize    ),
-    .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_11.mem"  ),
-    .weightFile  ("w_1_11.mem"  ),
-    .sigmoidFile ("sigmoid.mem" )
-) n_11 (
-    .clk              (clk                                     ),
-    .rst_n            (rst_n                                   ),
-    .neuron_in_valid  (layer_in_valid                          ),
-    .neuron_in        (layer_in_data                           ),
-    .neuron_out_valid (layer_out_valid[11]                     ),
-    .neuron_out       (layer_out_data[11*dataWidth+:dataWidth] )
-);
-
-neuron #(
-    .weightSize  (weightSize    ),
-    .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_12.mem"  ),
-    .weightFile  ("w_1_12.mem"  ),
-    .sigmoidFile ("sigmoid.mem" )
-) n_12 (
-    .clk              (clk                                     ),
-    .rst_n            (rst_n                                   ),
-    .neuron_in_valid  (layer_in_valid                          ),
-    .neuron_in        (layer_in_data                           ),
-    .neuron_out_valid (layer_out_valid[12]                     ),
-    .neuron_out       (layer_out_data[12*dataWidth+:dataWidth] )
-);
-
-neuron #(
-    .weightSize  (weightSize    ),
-    .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_13.mem"  ),
-    .weightFile  ("w_1_13.mem"  ),
-    .sigmoidFile ("sigmoid.mem" )
-) n_13 (
-    .clk              (clk                                     ),
-    .rst_n            (rst_n                                   ),
-    .neuron_in_valid  (layer_in_valid                          ),
-    .neuron_in        (layer_in_data                           ),
-    .neuron_out_valid (layer_out_valid[13]                     ),
-    .neuron_out       (layer_out_data[13*dataWidth+:dataWidth] )
-);
-
-neuron #(
-    .weightSize  (weightSize    ),
-    .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_14.mem"  ),
-    .weightFile  ("w_1_14.mem"  ),
-    .sigmoidFile ("sigmoid.mem" )
-) n_14 (
-    .clk              (clk                                     ),
-    .rst_n            (rst_n                                   ),
-    .neuron_in_valid  (layer_in_valid                          ),
-    .neuron_in        (layer_in_data                           ),
-    .neuron_out_valid (layer_out_valid[14]                     ),
-    .neuron_out       (layer_out_data[14*dataWidth+:dataWidth] )
-);
-
-neuron #(
-    .weightSize  (weightSize    ),
-    .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
-    .biasFile    ("b_1_15.mem"  ),
-    .weightFile  ("w_1_15.mem"  ),
-    .sigmoidFile ("sigmoid.mem" )
-) n_15 (
-    .clk              (clk                                     ),
-    .rst_n            (rst_n                                   ),
-    .neuron_in_valid  (layer_in_valid                          ),
-    .neuron_in        (layer_in_data                           ),
-    .neuron_out_valid (layer_out_valid[15]                     ),
-    .neuron_out       (layer_out_data[15*dataWidth+:dataWidth] )
 );
 
 endmodule
