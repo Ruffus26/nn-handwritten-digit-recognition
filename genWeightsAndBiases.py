@@ -5,8 +5,8 @@ dataWidth = 16
 intWidth  = 4
 fracWidth = 12
 
-weightInputFile = "Weights.txt"
-biasInputFile   = "Biases.txt"
+weightInputFile = "./trained_parameters/Weights.txt"
+biasInputFile   = "./trained_parameters/Biases.txt"
 
 outputDir = "./w_b/"
 
@@ -26,7 +26,7 @@ def generateWeightsAndBiases(weights_input, biases_input):
     # Convert the weights into Fixed Point representation and write them into a memory initialization file
     for layer in range(0, len(myWeights)):
         for neuron in range(0, len(myWeights[layer])):
-            file_name = 'w_' + str(layer + 1) + '_' + str(neuron) + '.mem'
+            file_name = 'w_' + str(layer + 1) + '_' + str(neuron) + '.mif'
             weight_file = open(outputDir + file_name, 'w+')
             for weight in range(0, len(myWeights[layer][neuron])):
                 if 'e' in str(myWeights[layer][neuron][weight]):
@@ -40,7 +40,7 @@ def generateWeightsAndBiases(weights_input, biases_input):
     # Convert the biases into Fixed Point representation and write them into a memory initialization file
     for layer in range(0, len(myBiases)):
         for neuron in range(0, len(myBiases[layer])):
-            file_name = 'b_' + str(layer + 1) + '_' + str(neuron) + '.mem'
+            file_name = 'b_' + str(layer + 1) + '_' + str(neuron) + '.mif'
             bias_file = open(outputDir + file_name, 'w+')
             if 'e' in str(myBiases[layer][neuron][0]):
                 bias_fxp = bfxp(0).bin()
