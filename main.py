@@ -10,7 +10,7 @@ def main():
     net = network.Network([784, 30, 30, 10, 10])
 
     # Use stochastic gradient descent to learn from the MNIST training_data
-    net.SGD(training_data, 50, 100, 1.0, test_data=test_data)
+    net.SGD(training_data, 30, 100, 1.0, test_data=test_data)
 
     # Save data from trained network
     net.save("Weights.txt", "Biases.txt")
