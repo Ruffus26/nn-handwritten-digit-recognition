@@ -6,7 +6,7 @@
 
 module top_nn;
 
-// Wires
+// Global wires
 wire   clk;
 wire   rst_n;
 
@@ -29,47 +29,146 @@ initial begin
 end
 
 // Assignmets
-assign clk = clock;
-assign rst_n = reset_n;
+assign clk     = clock;
+assign rst_n   = reset_n;
+assign read_en = renable;
 
 // Parameters
-localparam dataWidth = 16;
-localparam outData   = 10;
-localparam outWidth  = $clog2(outData);
+localparam nn_data_in_size = 784;
+localparam dataWidth       = 16;
+localparam outData         = 10;
+localparam outWidth        = $clog2(outData);
+localparam testSamples     = 1000;
 
 // Interconnection wires
-wire                   read_en;
+wire                   read_en   ;
 wire                   mem_valid ;
 wire [dataWidth - 1:0] mem_data  ;
 wire                   last      ;
 wire                   net_valid ;
 wire [outWidth - 1:0]  net_data  ;
 
-// Generate a read enable signal
-reg renable;
+// Internal registers
+reg                   renable  ;
+reg                   in_valid ;
+reg [dataWidth - 1:0] in_data  ;
+reg [dataWidth - 1:0] in_mem [nn_data_in_size : 0];
+reg [dataWidth - 1:0] expected;
+reg [7:0]             testFile [17:0];
+
+// Test wire assignments
+assign mem_valid = in_valid;
+assign mem_data  = in_data;
+
+// Convert digit to ASCII
+function [7:0] to_ascii;
+input integer a;
+
+    return a + 48;
+endfunction
+
+// Initialize the test file with a default name
+function void init_test_file();
+    begin
+        testFile[17] = "t";
+        testFile[16] = "e";
+        testFile[15] = "s";
+        testFile[14] = "t";
+        testFile[13] = "_";
+        testFile[12] = "d";
+        testFile[11] = "a";
+        testFile[10] = "t";
+        testFile[9]  = "a";
+        testFile[8]  = "_";
+        testFile[7]  = "0";
+        testFile[6]  = "0";
+        testFile[5]  = "0";
+        testFile[4]  = "0";
+        testFile[3]  = ".";
+        testFile[2]  = "m";
+        testFile[1]  = "i";
+        testFile[0]  = "f";
+    end
+endfunction
+
+// Send test data
+task send_test_data();
+integer index;
+
+    begin
+        $readmemb(testFile, in_mem);
+        for (index = 0; index < nn_data_in_size; index = index + 1) begin
+            in_valid <= 1'b1;
+            in_data  <= in_mem[index];
+            @(posedge clk);
+        end
+        in_valid <= 1'b0;
+        expected <= in_mem[nn_data_in_size];
+        @(posedge clk);
+    end
+endtask
+
+// Count the matches between the expected data and the neural network result
+integer match_count = 0;
+
+// Init a test regression
+task init_test_regression();
+integer testCount;
+integer tmpCount;
+integer offset;
+
+    begin
+        init_test_file();
+        for (testCount = 0; testCount < testSamples; testCount = testCount + 1) begin
+            tmpCount = testCount;
+            offset   = 0;
+            while (tmpCount != 0) begin
+                testFile[offset + 4] = to_ascii(tmpCount % 10);
+                tmpCount             = tmpCount / 10;
+                offset               = offset + 1;
+            end
+
+            // Send one sample of test data
+            send_test_data();
+
+            // Wait for neural network to generate a result
+            @(posedge net_valid);
+
+            // Go forward with 1 clock cycle
+            repeat(1) @(posedge clk);
+
+            // Get the neural network result and compare it to the expected value
+            if (net_data == expected)
+                match_count = match_count + 1;
+        end
+
+        // Display the accuracy
+        $display("Accuracy: %f %% (%d / %d)", (match_count * 100 / testCount), match_count, testCount);
+    end
+endtask
+
+// Top module entry point
 initial begin
+    // Wait for reset to end and synchronize to the clock posedge
     @(posedge clk);
-    renable <= 1'b0;
     @(posedge rst_n);
     @(posedge clk);
-    renable <= 1'b1;
-    @(negedge last);
-    renable <= 1'b0;
+
+    // Init a test regression
+    init_test_regression();
 end
 
-assign read_en = renable;
-
 // Instantiate the neural network memory
-nn_memory #(
-    .dataWidth (dataWidth )
-) i_nn_memory (
-    .clk       (clk       ),
-    .rst_n     (rst_n     ),
-    .ren       (read_en   ),
-    .mem_valid (mem_valid ),
-    .mem_data  (mem_data  ),
-    .data_last (last      )
-);
+// nn_memory #(
+//     .dataWidth (dataWidth )
+// ) i_nn_memory (
+//     .clk       (clk       ),
+//     .rst_n     (rst_n     ),
+//     .ren       (read_en   ),
+//     .mem_valid (mem_valid ),
+//     .mem_data  (mem_data  ),
+//     .data_last (last      )
+// );
 
 // Instantiate the neural network core
 net #(
@@ -86,10 +185,10 @@ net #(
 );
 
 // Neural network output definition
-always @(posedge clk) begin
-    if (net_valid) begin
-        $display("Recognized digit = %0d", net_data);
-    end
-end
+// always @(posedge clk) begin
+//     if (net_valid) begin
+//         $display("Recognized digit = %0d", net_data);
+//     end
+// end
     
 endmodule
