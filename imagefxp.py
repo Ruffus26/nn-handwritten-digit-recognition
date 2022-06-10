@@ -32,15 +32,14 @@ def resize_to_28x28(img):
     return out_img
 
 # Output file for image binary data
-img_bin_file_path = "./rtl/input_nn.mem"
+img_bin_file_path = "./rtl/input_nn.mif"
 
 # Read image
 image_path = sys.argv[1]
 img = cv2.imread(image_path, 0)
 
 # Resize the image
-# img = cv2.resize(img, (28, 28))
-# img = resize_to_28x28(img)
+img = resize_to_28x28(img)
 
 # Invert the pixel data (black <-> white)
 # img = cv2.bitwise_not(img)
