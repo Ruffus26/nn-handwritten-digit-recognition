@@ -6,15 +6,17 @@
 
 module top_nn;
 
-// Generate a clock signal
+// Wires
+wire   clk;
+wire   rst_n;
+
+// Generate a clock signal (with a frequency of 100 Mhz)
 reg clock;
 initial begin
     clock <= 1'b0;
-    #20;
-    forever #20 clock <= ~clock;
+    #10;
+    forever #5 clock <= ~clock;
 end
-wire   clk;
-assign clk = clock;
 
 // Generate an active low reset signal
 reg reset_n;
@@ -25,7 +27,9 @@ initial begin
     #50;
     reset_n <= 1'b1;
 end
-wire   rst_n;
+
+// Assignmets
+assign clk = clock;
 assign rst_n = reset_n;
 
 // Parameters
@@ -34,6 +38,7 @@ localparam outData   = 10;
 localparam outWidth  = $clog2(outData);
 
 // Interconnection wires
+wire                   read_en;
 wire                   mem_valid ;
 wire [dataWidth - 1:0] mem_data  ;
 wire                   last      ;
@@ -51,7 +56,7 @@ initial begin
     @(negedge last);
     renable <= 1'b0;
 end
-wire   read_en;
+
 assign read_en = renable;
 
 // Instantiate the neural network memory

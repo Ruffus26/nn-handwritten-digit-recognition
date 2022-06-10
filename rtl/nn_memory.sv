@@ -24,7 +24,7 @@ localparam addrWidth = $clog2(memWidth);
 
 initial begin
     // Read neural inputs from the memory initialization file
-    $readmemb("input_nn.mem", mem);
+    $readmemb("input_nn.mif", mem);
 end
 
 // Memory address pointer

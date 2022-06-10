@@ -39,8 +39,7 @@ reg  [dataWidth - 1:0]                   hlayer_1_out_data          ;
 
 hidden_layer_1 #(
     .dataWidth       (dataWidth                ),
-    .neurons         (hidden_layer_1_nn        ),
-    .sigmoidSize     (sigmoid_size             )
+    .neurons         (hidden_layer_1_nn        )
 ) i_hidden_layer_1 (
     .clk             (clk                      ),
     .rst_n           (rst_n                    ),
@@ -94,8 +93,7 @@ reg  [dataWidth - 1:0]                   hlayer_2_out_data          ;
 
 hidden_layer_2 #(
     .dataWidth       (dataWidth                ),
-    .neurons         (hidden_layer_2_nn        ),
-    .sigmoidSize     (sigmoid_size             )
+    .neurons         (hidden_layer_2_nn        )
 ) i_hidden_layer_2 (
     .clk             (clk                      ),
     .rst_n           (rst_n                    ),
@@ -149,8 +147,7 @@ reg  [dataWidth - 1:0]                   hlayer_3_out_data          ;
 
 hidden_layer_3 #(
     .dataWidth       (dataWidth                ),
-    .neurons         (hidden_layer_3_nn        ),
-    .sigmoidSize     (sigmoid_size             )
+    .neurons         (hidden_layer_3_nn        )
 ) i_hidden_layer_3 (
     .clk             (clk                      ),
     .rst_n           (rst_n                    ),
@@ -201,8 +198,7 @@ wire [out_layer_nn*dataWidth - 1:0] output_layer_data  ;
 
 output_layer #(
     .dataWidth           (dataWidth          ),
-    .neurons             (out_layer_nn       ),
-    .sigmoidSize         (sigmoid_size       )
+    .neurons             (out_layer_nn       )
 ) i_output_layer (
     .clk                 (clk                ),
     .rst_n               (rst_n              ),

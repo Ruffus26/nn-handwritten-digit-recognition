@@ -7,8 +7,7 @@
 module hidden_layer_3 #(
     parameter neurons     = 10  ,
               dataWidth   = 16  ,
-              weightSize  = 30  ,
-              sigmoidSize = 5
+              weightSize  = 30  
 ) (
     input                            clk             ,
     input                            rst_n           ,
@@ -22,10 +21,8 @@ module hidden_layer_3 #(
 neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
     .biasFile    ("b_3_0.mif"   ),
-    .weightFile  ("w_3_0.mif"   ),
-    .sigmoidFile ("sigmoid.mem" )
+    .weightFile  ("w_3_0.mif"   )
 ) n_0 (
     .clk              (clk                                    ),
     .rst_n            (rst_n                                  ),
@@ -38,10 +35,8 @@ neuron #(
 neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
     .biasFile    ("b_3_1.mif"   ),
-    .weightFile  ("w_3_1.mif"   ),
-    .sigmoidFile ("sigmoid.mem" )
+    .weightFile  ("w_3_1.mif"   )
 ) n_1 (
     .clk              (clk                                    ),
     .rst_n            (rst_n                                  ),
@@ -54,10 +49,8 @@ neuron #(
 neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
     .biasFile    ("b_3_2.mif"   ),
-    .weightFile  ("w_3_2.mif"   ),
-    .sigmoidFile ("sigmoid.mem" )
+    .weightFile  ("w_3_2.mif"   )
 ) n_2 (
     .clk              (clk                                    ),
     .rst_n            (rst_n                                  ),
@@ -70,10 +63,8 @@ neuron #(
 neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
     .biasFile    ("b_3_3.mif"   ),
-    .weightFile  ("w_3_3.mif"   ),
-    .sigmoidFile ("sigmoid.mem" )
+    .weightFile  ("w_3_3.mif"   )
 ) n_3 (
     .clk              (clk                                    ),
     .rst_n            (rst_n                                  ),
@@ -86,10 +77,8 @@ neuron #(
 neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
     .biasFile    ("b_3_4.mif"   ),
-    .weightFile  ("w_3_4.mif"   ),
-    .sigmoidFile ("sigmoid.mem" )
+    .weightFile  ("w_3_4.mif"   )
 ) n_4 (
     .clk              (clk                                    ),
     .rst_n            (rst_n                                  ),
@@ -102,10 +91,8 @@ neuron #(
 neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
     .biasFile    ("b_3_5.mif"   ),
-    .weightFile  ("w_3_5.mif"   ),
-    .sigmoidFile ("sigmoid.mem" )
+    .weightFile  ("w_3_5.mif"   )
 ) n_5 (
     .clk              (clk                                    ),
     .rst_n            (rst_n                                  ),
@@ -118,10 +105,8 @@ neuron #(
 neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
     .biasFile    ("b_3_6.mif"   ),
-    .weightFile  ("w_3_6.mif"   ),
-    .sigmoidFile ("sigmoid.mem" )
+    .weightFile  ("w_3_6.mif"   )
 ) n_6 (
     .clk              (clk                                    ),
     .rst_n            (rst_n                                  ),
@@ -134,10 +119,8 @@ neuron #(
 neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
     .biasFile    ("b_3_7.mif"   ),
-    .weightFile  ("w_3_7.mif"   ),
-    .sigmoidFile ("sigmoid.mem" )
+    .weightFile  ("w_3_7.mif"   )
 ) n_7 (
     .clk              (clk                                    ),
     .rst_n            (rst_n                                  ),
@@ -150,10 +133,8 @@ neuron #(
 neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
     .biasFile    ("b_3_8.mif"   ),
-    .weightFile  ("w_3_8.mif"   ),
-    .sigmoidFile ("sigmoid.mem" )
+    .weightFile  ("w_3_8.mif"   )
 ) n_8 (
     .clk              (clk                                    ),
     .rst_n            (rst_n                                  ),
@@ -166,10 +147,8 @@ neuron #(
 neuron #(
     .weightSize  (weightSize    ),
     .dataWidth   (dataWidth     ),
-    .sigmoidSize (sigmoidSize   ),
     .biasFile    ("b_3_9.mif"   ),
-    .weightFile  ("w_3_9.mif"   ),
-    .sigmoidFile ("sigmoid.mem" )
+    .weightFile  ("w_3_9.mif"   )
 ) n_9 (
     .clk              (clk                                    ),
     .rst_n            (rst_n                                  ),

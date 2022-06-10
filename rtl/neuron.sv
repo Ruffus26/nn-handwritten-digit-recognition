@@ -2,15 +2,14 @@
 
 // Author : Cernalevschi Cristian
 // Project: NN handwritten digit recognition
-// File   : Sigmoid Neuron RTL module
+// File   : Neuron RTL module
 
 module neuron #(
     parameter weightSize   = 784 ,
               dataWidth    = 16  ,
               sigmoidSize  = 5   ,
               biasFile     = ""  ,
-              weightFile   = ""  ,
-              sigmoidFile  = ""
+              weightFile   = ""  
 ) (
     input                    clk              ,
     input                    rst_n            ,
@@ -19,8 +18,9 @@ module neuron #(
     output reg               neuron_out_valid ,
     output [dataWidth - 1:0] neuron_out       
 );
-    
-parameter addrWidth = $clog2(weightSize);
+
+parameter addrWidth      = $clog2(weightSize);
+parameter weightIntWidth = 4;
 
 //// INTERNAL REGISTERS AND WIRES ////
 
@@ -36,24 +36,24 @@ wire ren;
 reg [dataWidth - 1:0] neuron_in_d;
 // Valid on receiving the weight from memory
 reg weight_valid;
-// Valid for performing multiplication
-reg mult_valid;
 // Weight Memory output
 wire [dataWidth - 1:0] wout;
+// Valid for performing multiplication
+reg mult_valid;
 // Store the result of multiplication between the weight and the neuron input
 reg [2*dataWidth - 1:0] mult_res;
-// Valid for driving data to activation function module
-reg activation_valid;
 // Addition between previous neuron sum and (value * weight) multiplication
 wire [2*dataWidth:0] add;
 // Addition between bias and the final sum
 wire [2*dataWidth:0] biasAdd;
-// Store and accumulate the current sum for the neuron
-reg [2*dataWidth - 1:0] sum;
 // Valid for performing addition between products
 reg sum_valid;
+// Store and accumulate the current sum for the neuron
+reg [2*dataWidth - 1:0] sum;
 // A pulse indicating the last calculated sum
 reg sum_last;
+// Valid for driving data to activation function module
+reg activation_valid;
 
 assign ren     = neuron_in_valid;
 assign add     = mult_res + sum;
@@ -198,21 +198,10 @@ weight_mem #(
     .wout  (wout      )
 );
 
-// Instantiate the Memory for Sigmoid Mapping
-// sigmoid_rom #(
-//     .inWidth     (sigmoidSize ),
-//     .dataWidth   (dataWidth   ),
-//     .sigmoidFile (sigmoidFile )
-// ) i_sigmoid_rom (
-//     .clk     (clk                               ),
-//     .in_val  (activation_valid                  ),
-//     .sig_in  (sum[2*dataWidth - 1-:sigmoidSize] ),
-//     .sig_out (neuron_out                        )
-// );
-
 // Instantiate the ReLu activation module
 relu_activation #(
-    .dataWidth  (dataWidth         )
+    .dataWidth  (dataWidth         ),
+    .intWidth   (weightIntWidth    )
 ) i_relu (
     .clk        (clk               ),
     .rst_n      (rst_n             ),
