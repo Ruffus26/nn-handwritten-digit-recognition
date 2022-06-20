@@ -11,7 +11,7 @@ module max_find #(
 ) (
     input                              clk       ,
     input                              rst_n     ,
-    input                              in_valid  ,
+    input [inData - 1:0]               in_valid  ,
     input [(inData * dataWidth) - 1:0] in_data   ,
     output reg                         out_valid ,
     output reg [outWidth - 1:0]        out_data
@@ -27,7 +27,7 @@ always @(posedge clk) begin
         out_valid <= 1'b0;
         out_data  <= 'b0; 
     end
-    else if (in_valid) begin
+    else if (in_valid[0]) begin
         max_value      <= in_data[dataWidth - 1:0];
         counter        <= 1;
         in_data_buffer <= in_data;

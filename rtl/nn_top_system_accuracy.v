@@ -2,9 +2,9 @@
 
 // Author : Cernalevschi Cristian
 // Project: NN handwritten digit recognition
-// File   : The top neural network module
+// File   : The top neural network module (non-synthesizable) used only in simulation to calculate system accuracy 
 
-module top_nn;
+module nn_top_system_accuracy;
 
 // Global wires
 wire   clk;
@@ -13,52 +13,47 @@ wire   rst_n;
 // Generate a clock signal (with a frequency of 100 Mhz)
 reg clock;
 initial begin
-    clock <= 1'b0;
-    #10;
-    forever #5 clock <= ~clock;
+   clock <= 1'b0;
+   #10;
+   forever #5 clock <= ~clock;
 end
 
 // Generate an active low reset signal
 reg reset_n;
 initial begin
-    reset_n <= 1'b1;
-    #40;
-    reset_n <= 1'b0;
-    #50;
-    reset_n <= 1'b1;
+   reset_n <= 1'b1;
+   #40;
+   reset_n <= 1'b0;
+   #50;
+   reset_n <= 1'b1;
 end
 
 // Assignmets
-assign clk     = clock;
-assign rst_n   = reset_n;
-assign read_en = renable;
+assign clk     = clock   ;
+assign rst_n   = reset_n ;
 
 // Parameters
-localparam nn_data_in_size = 784;
-localparam dataWidth       = 16;
-localparam outData         = 10;
-localparam outWidth        = $clog2(outData);
-localparam testSamples     = 1000;
+localparam nn_data_in_size = 784              ;
+localparam dataWidth       = 16               ;
+localparam outData         = 10               ;
+localparam outWidth        = $clog2(outData)  ;
+localparam testSamples     = 1000             ;
 
 // Interconnection wires
-wire                   read_en   ;
 wire                   mem_valid ;
 wire [dataWidth - 1:0] mem_data  ;
 wire                   last      ;
-wire                   net_valid ;
-wire [outWidth - 1:0]  net_data  ;
 
 // Internal registers
-reg                   renable  ;
 reg                   in_valid ;
 reg [dataWidth - 1:0] in_data  ;
 reg [dataWidth - 1:0] in_mem [nn_data_in_size : 0];
-reg [dataWidth - 1:0] expected;
-reg [7:0]             testFile [17:0];
+reg [dataWidth - 1:0] expected        ;
+reg [7:0]             testFile [17:0] ;
 
 // Test wire assignments
-assign mem_valid = in_valid;
-assign mem_data  = in_data;
+assign mem_valid = in_valid ;
+assign mem_data  = in_data  ;
 
 // Convert digit to ASCII
 function [7:0] to_ascii;
@@ -149,26 +144,14 @@ endtask
 
 // Top module entry point
 initial begin
-    // Wait for reset to end and synchronize to the clock posedge
-    @(posedge clk);
-    @(posedge rst_n);
-    @(posedge clk);
+   // Wait for reset to end and synchronize to the clock posedge
+   @(posedge clk);
+   @(posedge rst_n);
+   @(posedge clk);
 
-    // Init a test regression
-    init_test_regression();
+   // Init a test regression
+   init_test_regression();
 end
-
-// Instantiate the neural network memory
-// nn_memory #(
-//     .dataWidth (dataWidth )
-// ) i_nn_memory (
-//     .clk       (clk       ),
-//     .rst_n     (rst_n     ),
-//     .ren       (read_en   ),
-//     .mem_valid (mem_valid ),
-//     .mem_data  (mem_data  ),
-//     .data_last (last      )
-// );
 
 // Instantiate the neural network core
 net #(
@@ -184,11 +167,4 @@ net #(
     .net_out_data  (net_data  )
 );
 
-// Neural network output definition
-// always @(posedge clk) begin
-//     if (net_valid) begin
-//         $display("Recognized digit = %0d", net_data);
-//     end
-// end
-    
 endmodule

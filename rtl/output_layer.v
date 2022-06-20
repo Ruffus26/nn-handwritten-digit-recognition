@@ -13,12 +13,9 @@ module output_layer #(
     input                            rst_n               ,
     input                            out_layer_in_valid  ,
     input  [dataWidth - 1:0]         out_layer_in_data   ,
-    output wire                      out_layer_out_valid ,
+    output [neurons - 1:0]           out_layer_out_valid ,
     output [neurons*dataWidth - 1:0] out_layer_out_data  
 );
-
-reg [neurons - 1:0]          out_layer_out_valid_reg;
-assign out_layer_out_valid = out_layer_out_valid_reg[0];
 
 // Layer's neurons instantiation
 neuron #(
@@ -31,7 +28,7 @@ neuron #(
     .rst_n            (rst_n                                      ),
     .neuron_in_valid  (out_layer_in_valid                         ),
     .neuron_in        (out_layer_in_data                          ),
-    .neuron_out_valid (out_layer_out_valid_reg[0]                 ),
+    .neuron_out_valid (out_layer_out_valid[0]                 ),
     .neuron_out       (out_layer_out_data[0*dataWidth+:dataWidth] )
 );
 
@@ -45,7 +42,7 @@ neuron #(
     .rst_n            (rst_n                                      ),
     .neuron_in_valid  (out_layer_in_valid                         ),
     .neuron_in        (out_layer_in_data                          ),
-    .neuron_out_valid (out_layer_out_valid_reg[1]                 ),
+    .neuron_out_valid (out_layer_out_valid[1]                 ),
     .neuron_out       (out_layer_out_data[1*dataWidth+:dataWidth] )
 );
 
@@ -59,7 +56,7 @@ neuron #(
     .rst_n            (rst_n                                      ),
     .neuron_in_valid  (out_layer_in_valid                         ),
     .neuron_in        (out_layer_in_data                          ),
-    .neuron_out_valid (out_layer_out_valid_reg[2]                 ),
+    .neuron_out_valid (out_layer_out_valid[2]                 ),
     .neuron_out       (out_layer_out_data[2*dataWidth+:dataWidth] )
 );
 
@@ -73,7 +70,7 @@ neuron #(
     .rst_n            (rst_n                                      ),
     .neuron_in_valid  (out_layer_in_valid                         ),
     .neuron_in        (out_layer_in_data                          ),
-    .neuron_out_valid (out_layer_out_valid_reg[3]                 ),
+    .neuron_out_valid (out_layer_out_valid[3]                 ),
     .neuron_out       (out_layer_out_data[3*dataWidth+:dataWidth] )
 );
 
@@ -87,7 +84,7 @@ neuron #(
     .rst_n            (rst_n                                      ),
     .neuron_in_valid  (out_layer_in_valid                         ),
     .neuron_in        (out_layer_in_data                          ),
-    .neuron_out_valid (out_layer_out_valid_reg[4]                 ),
+    .neuron_out_valid (out_layer_out_valid[4]                 ),
     .neuron_out       (out_layer_out_data[4*dataWidth+:dataWidth] )
 );
 
@@ -101,7 +98,7 @@ neuron #(
     .rst_n            (rst_n                                      ),
     .neuron_in_valid  (out_layer_in_valid                         ),
     .neuron_in        (out_layer_in_data                          ),
-    .neuron_out_valid (out_layer_out_valid_reg[5]                 ),
+    .neuron_out_valid (out_layer_out_valid[5]                 ),
     .neuron_out       (out_layer_out_data[5*dataWidth+:dataWidth] )
 );
 
@@ -115,7 +112,7 @@ neuron #(
     .rst_n            (rst_n                                      ),
     .neuron_in_valid  (out_layer_in_valid                         ),
     .neuron_in        (out_layer_in_data                          ),
-    .neuron_out_valid (out_layer_out_valid_reg[6]                 ),
+    .neuron_out_valid (out_layer_out_valid[6]                 ),
     .neuron_out       (out_layer_out_data[6*dataWidth+:dataWidth] )
 );
 
@@ -129,7 +126,7 @@ neuron #(
     .rst_n            (rst_n                                      ),
     .neuron_in_valid  (out_layer_in_valid                         ),
     .neuron_in        (out_layer_in_data                          ),
-    .neuron_out_valid (out_layer_out_valid_reg[7]                 ),
+    .neuron_out_valid (out_layer_out_valid[7]                 ),
     .neuron_out       (out_layer_out_data[7*dataWidth+:dataWidth] )
 );
 
@@ -143,7 +140,7 @@ neuron #(
     .rst_n            (rst_n                                      ),
     .neuron_in_valid  (out_layer_in_valid                         ),
     .neuron_in        (out_layer_in_data                          ),
-    .neuron_out_valid (out_layer_out_valid_reg[8]                 ),
+    .neuron_out_valid (out_layer_out_valid[8]                 ),
     .neuron_out       (out_layer_out_data[8*dataWidth+:dataWidth] )
 );
 
@@ -157,7 +154,7 @@ neuron #(
     .rst_n            (rst_n                                      ),
     .neuron_in_valid  (out_layer_in_valid                         ),
     .neuron_in        (out_layer_in_data                          ),
-    .neuron_out_valid (out_layer_out_valid_reg[9]                 ),
+    .neuron_out_valid (out_layer_out_valid[9]                 ),
     .neuron_out       (out_layer_out_data[9*dataWidth+:dataWidth] )
 );
 
